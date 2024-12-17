@@ -1,26 +1,25 @@
-import { useState, useEffect } from "react";
-import { Box, Button, Text } from "@chakra-ui/react";
-import { FaPaperPlane, FaCheck, FaTrash } from "react-icons/fa";
 
-const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
+
+
+const Content = ({ FormControl, FormLabel, Input, Select, Box, Button, Text, useState, useEffect, FaPaperPlane, FaCheck, FaTrash}) => {
 
   // Estado de las tareas, lista de tareas y tareas en el local storage
   const [inputValue, setInputValue] = useState("");
   const [tasksArray, setTasksArray] = useState(() => {
-    const savedTasks = localStorage.getItem("Tarea");
-    return savedTasks ? JSON.parse(savedTasks) : [];
+    const localTasks = localStorage.getItem("Tarea");
+    return localTasks ? JSON.parse(localTasks) : [];
   });
   const [selectValue, setSelectValue] = useState("");
 
 
-  // Cambiar valor de input
-  const changeInputValue = (e) => {
-    setInputValue(e.target.value);
+  // Cambiar valor del input de manera sincrónica
+  const changeInputValue = (event) => {
+    setInputValue(event.target.value);
+    console.log(inputValue)
   };
 
-  // Función para agregar tarea
-  const addTask = (e) => {
-    e.preventDefault();
+  // Agregar nueva tarea a la lista
+  const addTask = () => {
     if (inputValue === "") {
       alert("Ingrese una tarea");
     } else {
@@ -28,13 +27,14 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
       const updatedTasks = [...tasksArray, newTask];
       setTasksArray(updatedTasks);
       setInputValue("");
+      console.log(tasksArray)
     }
   };
 
   // Función para cambiar el estado de completado de una tarea
   const completedTask = (index) => {
-    setTasksArray(prevTasks =>
-      prevTasks.map((task, i) =>
+    setTasksArray(tasks =>
+      tasks.map((task, i) =>
         i === index ? { ...task, completed: !task.completed } : task
       )
     );
@@ -42,11 +42,10 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
 
   // Función para eliminar tarea
   const deleteTask = (index) => {
-    const updatedTasks = tasksArray.filter((_, i) => i !== index);
-    setTasksArray(updatedTasks);
+    setTasksArray(tasksArray.filter((_, i) => i !== index));
   };
 
-  // Guardar tareas en LocalStorage cada vez que cambia el estado de las tareas
+  // Guardar tareas en LocalStorage cada vez que cambia el estado
   useEffect(() => {
     localStorage.setItem("Tarea", JSON.stringify(tasksArray));
   }, [tasksArray]);
@@ -86,9 +85,10 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
       {/* Lista de tareas */}
       <Box mt="10">
         {tasksArray.map((task, index) => (
+          /* Texto de la tarea */
           <Box key={index} display="flex" flex="row" bg="white" justifyContent="space-between" alignItems="center">
             <Text 
-              fontSize="2xl" 
+              fontSize="xl" 
               color="gray.600"
               display="inline" 
               mx="4" 
@@ -97,16 +97,19 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
               {task.text}
             </Text>
             <div>
+            {/* Botón marcar como completado */}
               <Button
                 colorScheme="green"
                 rounded="0"
                 color="white"
                 px="6"
                 py="8"
-                onClick={() => completedTask(index)} // Cambiar el estado completado
+                onClick={() => completedTask(index)}
               >
                 <FaCheck />
               </Button>
+
+              {/* Botón eliminar tarea */}
               <Button
                 colorScheme="red"
                 rounded="0"
@@ -125,4 +128,4 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
   );
 };
 
-export default Inputs;
+export default Content;
