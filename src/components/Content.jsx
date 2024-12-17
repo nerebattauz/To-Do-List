@@ -1,7 +1,6 @@
 import {
   FormControl,
   FormLabel,
-  Heading,
   Input,
   Select,
   Box,
@@ -18,18 +17,13 @@ const Content = () => {
     const localTasks = localStorage.getItem("Tarea");
     return localTasks ? JSON.parse(localTasks) : [];
   });
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState("all");
 
-  // Cambiar valor del input de manera sincrónica
-  const changeInputValue = (event) => {
-    setInputValue(event.target.value);
+  // Cambiar valor del input
+  const changeInputValue = (e) => {
+    setInputValue(e.target.value);
     console.log(inputValue);
   };
-
-  // Guardar tareas en LocalStorage de manera sincrónica
-  useEffect(() => {
-    localStorage.setItem("Tarea", JSON.stringify(tasksArray));
-  }, [tasksArray]);
 
   // Agregar nueva tarea a la lista
   const addTask = () => {
@@ -44,7 +38,12 @@ const Content = () => {
     }
   };
 
-  // Función para cambiar el estado de completado de una tarea
+    // Guardar tareas en LocalStorage de manera inmediata
+    useEffect(() => {
+      localStorage.setItem("Tarea", JSON.stringify(tasksArray));
+    }, [tasksArray]);
+
+  // Cambiar el estado de completado de una tarea
   const completedTask = (index) => {
     setTasksArray((tasks) =>
       tasks.map((task, i) =>
@@ -53,10 +52,20 @@ const Content = () => {
     );
   };
 
-  // Función para eliminar tarea
+  // Eliminar tarea
   const deleteTask = (index) => {
     setTasksArray(tasksArray.filter((_, i) => i !== index));
   };
+
+  // Filtrar tareas
+  const filtrarTareas = (e) => {  
+    setSelectValue(e.target.value)
+  }
+
+  // Filtrar tareas de manera inmediata
+  useEffect(() => {
+    console.log(selectValue)
+  }, [selectValue]);
 
   return (
     <Box display="flex" flexDir="column" gap="8" w="80%">
@@ -87,7 +96,7 @@ const Content = () => {
             size="lg"
             bg="white"
             color="gray.600"
-            onChange={(e) => setSelectValue(e.target.value)}
+            onChange={filtrarTareas}
           >
             <option color="purple.800" value="all">
               Todas las tareas
