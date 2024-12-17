@@ -9,8 +9,6 @@ import {
 
 import Inputs from "./components/Inputs";
 import Title from "./components/Title";
-import List from "./components/List";
-
 function App() {
   return (
     <Container
@@ -33,7 +31,6 @@ function App() {
         Input={Input}
         Select={Select}
       />
-      <List/>
     </Container>
   );
 }

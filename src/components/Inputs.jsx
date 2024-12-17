@@ -1,45 +1,50 @@
 import { useState, useEffect } from "react";
-import { Box, Button } from "@chakra-ui/react";
-import { FaPaperPlane } from "react-icons/fa";
+import { Box, Button, Text } from "@chakra-ui/react";
+import { FaPaperPlane, FaCheck, FaTrash } from "react-icons/fa";
 import { setLocalStorage } from "../localStorage";
 import { getLocalStorage } from "../localStorage";
+import Item from "./Item";
 //import List from "./List";
 
 const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
   //Guardar tarea ingresada en el input en Local storage
   const [inputValue, setInputValue] = useState("");
-  const [tasksArray, setTasksArray] = useState([]);
+  const [tasksArray, setTasksArray] = useState(() => {
+    const savedTasks = localStorage.getItem("Tarea");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
   const changeInputValue = (e) => {
     setInputValue(e.target.value);
     console.log(inputValue);
-    localStorage.setItem("Tarea", inputValue);
+    localStorage.setItem("Tarea", JSON.stringify([...tasksArray, inputValue]));
   };
 
   //Guardar valor seleccionado del select en Local storage
   const [selectValue, setSelectValue] = useState("");
   const changeValue = (e) => {
     setSelectValue(e.target.value);
-    //console.log(e.target.value);
   };
 
   //Agregar tarea a la lista de tarea
   const addTask = (e) => {
     e.preventDefault();
-    if (localStorage.getItem("Tarea") === "") {
-      console.log("Ingrese una tarea");
+    if (inputValue === "") {
+      alert("Ingrese una tarea");
     } else {
+      localStorage.getItem("Tarea");
       setTasksArray([...tasksArray, inputValue]);
       setInputValue("");
-      localStorage.setItem("Tarea", "")
-      console.log(inputValue);
     }
   };
-  useEffect(() => {
-    
-  }, [inputValue]);
 
+  const deleteTask = (task) => {
+    console.log(task.index);
+  };
+
+  useEffect(() => {}, [inputValue], [tasksArray]);
   useEffect(() => {
-    console.log("Tareas actualizadas:", tasksArray);
+    localStorage.setItem("Tarea", JSON.stringify(tasksArray));
   }, [tasksArray]);
 
   //DEVOLUCIÓN HTML
@@ -98,11 +103,47 @@ const Inputs = ({ FormControl, FormLabel, Input, Select }) => {
         Agregar tarea
         <FaPaperPlane />
       </Button>
-      {/* <div>
-        {tasksArray.map((task) => {
-          <Text>{task}</Text>;
-        })}
-      </div> */}
+
+      {/* Lista */}
+
+      <Box mt="10">
+        {tasksArray.map((task, index) => (
+          <Box
+            key={index}
+            display="flex"
+            flex="row"
+            bg="white"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text fontSize="2xl" color="gray.600" display="inline" mx="4">
+              {task}
+            </Text>
+            <div>
+              <Button
+                colorScheme="green"
+                rounded="0"
+                color="white"
+                px="6"
+                py="8"
+                onClick={completedTask(task)}
+              >
+                <FaCheck />
+              </Button>
+              <Button
+                colorScheme="red"
+                rounded="0"
+                color="white"
+                px="6"
+                py="8"
+                onClick={deleteTask}
+              >
+                <FaTrash />
+              </Button>
+            </div>
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };
