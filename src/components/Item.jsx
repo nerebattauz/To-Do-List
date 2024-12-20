@@ -1,5 +1,5 @@
 import { Box, Button, Text } from "@chakra-ui/react";
-import { FaPaperPlane, FaCheck, FaTrash } from "react-icons/fa";
+import { FaCheck, FaTrash } from "react-icons/fa";
 
 const Item = ({ tasks, status, trash }) => {
   return (

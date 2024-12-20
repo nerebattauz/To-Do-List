@@ -1,15 +1,9 @@
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Box,
-  Button,
-  Text,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { FaPaperPlane } from "react-icons/fa";
 import Item from "./Item";
+import InputText from "./InputText";
+import AddButton from "./AddButton";
+import InputSelect from "./InputSelect";
 
 const Content = () => {
   // Estado de las tareas, lista de tareas y tareas en el local storage
@@ -28,7 +22,6 @@ const Content = () => {
   // Cambiar valor del input
   const changeInputValue = (e) => {
     setInputValue(e.target.value);
-    console.log(inputValue);
   };
 
   // Agregar nueva tarea a la lista
@@ -51,10 +44,10 @@ const Content = () => {
   useEffect(() => {
     localStorage.setItem("Tarea", JSON.stringify(tasksArray));
     setUpdatedTasks(tasksArray);
-  }, [tasksArray, updatedTasks]);
+  }, [tasksArray]);
 
   // Seleccionar estado tareas
-  const filtrarTareas = (e) => {
+  const filterTasks = (e) => {
     setSelectValue(e.target.value);
   };
 
@@ -67,7 +60,7 @@ const Content = () => {
     } else if (selectValue === "all") {
       setUpdatedTasks(tasksArray);
     }
-  }, [selectValue, updatedTasks]);
+  }, [selectValue]);
 
   // Tachar tarea
   const completedTask = (id) => {
@@ -92,51 +85,14 @@ const Content = () => {
         justifySelf="center"
       >
         {/* Input de tarea */}
-        <FormControl>
-          <FormLabel>Tarea</FormLabel>
-          <Input
-            value={inputValue}
-            size="lg"
-            bg="white"
-            color="gray.600"
-            placeholder="Ingresar una tarea"
-            onChange={changeInputValue}
-          />
-        </FormControl>
+        <InputText value={inputValue} onChange={changeInputValue} />
 
         {/* Input select estado tarea */}
-        <FormControl>
-          <FormLabel>Seleccionar</FormLabel>
-          <Select
-            value={selectValue}
-            size="lg"
-            bg="white"
-            color="gray.600"
-            onChange={filtrarTareas}
-          >
-            <option color="purple.800" value="all">
-              Todas las tareas
-            </option>
-            <option color="purple.800" value="incomplete">
-              Tareas incompletas
-            </option>
-            <option color="purple.800" value="completed">
-              Tareas completadas
-            </option>
-          </Select>
-        </FormControl>
+        <InputSelect value={selectValue} onChange={filterTasks} />
       </Box>
 
       {/* Botón agregar tarea */}
-      <Button
-        colorScheme="purple"
-        gap="4"
-        size="lg"
-        onClick={addTask}
-        type="submit"
-      >
-        Agregar tarea <FaPaperPlane />
-      </Button>
+      <AddButton onClick={addTask} />
 
       {/* Lista de tareas */}
       <Item tasks={updatedTasks} status={completedTask} trash={deleteTask} />

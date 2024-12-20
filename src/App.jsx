@@ -1,7 +1,4 @@
-
-import {
-  Container, Heading
-} from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import Content from "./components/Content";
 import Title from "./components/Title";
 
@@ -15,18 +12,16 @@ function App() {
       alignItems="center"
       gap="8"
       maxW="100vw"
-      h="100vh"
+      h="auto"
+      minH="100vh"
       mx="auto"
       textAlign="center"
       textColor="white"
     >
-      <Title Heading={Heading} />
-      <Content/>
+      <Title />
+      <Content />
     </Container>
-
-
   );
 }
 
 export default App;
-
