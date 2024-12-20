@@ -5,7 +5,7 @@ import {
   Select,
   Box,
   Button,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaPaperPlane, FaCheck, FaTrash } from "react-icons/fa";
@@ -18,6 +18,7 @@ const Content = () => {
     return localTasks ? JSON.parse(localTasks) : [];
   });
   const [selectValue, setSelectValue] = useState("all");
+  const [filteredTasks, setFilteredTasks] = useState(tasksArray);
 
   // Cambiar valor del input
   const changeInputValue = (e) => {
@@ -38,37 +39,41 @@ const Content = () => {
     }
   };
 
-    // Guardar tareas en LocalStorage de manera inmediata
-    useEffect(() => {
-      localStorage.setItem("Tarea", JSON.stringify(tasksArray));
-    }, [tasksArray]);
+  // Guardar tareas en LocalStorage de manera inmediata
+  useEffect(() => {
+    localStorage.setItem("Tarea", JSON.stringify(tasksArray));
+  }, [tasksArray]);
 
-  // Cambiar el estado de completado de una tarea
-  const completedTask = (index) => {
-    setTasksArray((tasks) =>
-      tasks.map((task, i) =>
-        i === index ? { ...task, completed: !task.completed } : task
-      )
-    );
+  // Seleccionar estado tareas
+  const filtrarTareas = (e) => {
+    setSelectValue(e.target.value);
   };
-
-  // Eliminar tarea
-  const deleteTask = (index) => {
-    setTasksArray(tasksArray.filter((_, i) => i !== index));
-  };
-
-  // Seleccionar tareas
-  const filtrarTareas = (e) => { 
-    setSelectValue(e.target.value)
-  }
 
   // Filtrar tareas de manera inmediata
   useEffect(() => {
-    const [filteredTasks, setFilteredTasks] = useState(tasksArray)
-    console.log(selectValue)
-    const allTasks = tasksArray
-
+    if (selectValue === "incomplete") {
+     setFilteredTasks(tasksArray.filter((task) => !task.completed));
+    } else if (selectValue === "completed") {
+    setFilteredTasks(tasksArray.filter((task) => task.completed));
+    } else if (selectValue === "all") {
+    setFilteredTasks(tasksArray);
+    }
   }, [selectValue]);
+
+    // Tachar tarea
+    const completedTask = (index) => {
+      setTasksArray((tasks) =>
+        tasks.map((task, i) =>
+          i === index ? { ...task, completed: !task.completed } : task
+        )
+      );
+    };
+  
+    // Eliminar tarea
+    const deleteTask = (index) => {
+      setTasksArray(tasksArray.filter((_, i) => i !== index));
+    };
+  
 
   return (
     <Box display="flex" flexDir="column" gap="8" w="80%">
@@ -127,7 +132,7 @@ const Content = () => {
 
       {/* Lista de tareas */}
       <Box mt="10">
-        {tasksArray.map((task, index) => (
+        {filteredTasks.map((task, index) => (
           /* Texto de la tarea */
           <Box
             key={index}
