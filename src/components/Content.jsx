@@ -17,8 +17,12 @@ const Content = () => {
     const localTasks = localStorage.getItem("Tarea");
     return localTasks ? JSON.parse(localTasks) : [];
   });
+  const [idCounter, setIdCounter] = useState(() => {
+    const savedCounter = localStorage.getItem("idCounter");
+    return savedCounter ? parseInt(savedCounter, 10) : 0;
+  });
   const [selectValue, setSelectValue] = useState("all");
-  const [filteredTasks, setFilteredTasks] = useState(tasksArray);
+  const [updatedTasks, setUpdatedTasks] = useState(tasksArray);
 
   // Cambiar valor del input
   const changeInputValue = (e) => {
@@ -31,18 +35,22 @@ const Content = () => {
     if (inputValue === "") {
       alert("Ingrese una tarea");
     } else {
-      const newTask = { text: inputValue, completed: false };
-      const updatedTasks = [...tasksArray, newTask];
-      setTasksArray(updatedTasks);
+      const newTask = {id: idCounter, text: inputValue, completed: false };
+      setTasksArray([...tasksArray, newTask]);
       setInputValue("");
-      console.log(tasksArray);
+
+     /// Aumentar id task
+    const newCounter = idCounter + 1;
+    setIdCounter(newCounter);
+    localStorage.setItem("idCounter", newCounter);
     }
   };
 
   // Guardar tareas en LocalStorage de manera inmediata
   useEffect(() => {
     localStorage.setItem("Tarea", JSON.stringify(tasksArray));
-  }, [tasksArray]);
+    setUpdatedTasks(tasksArray);
+  }, [tasksArray, updatedTasks]);
 
   // Seleccionar estado tareas
   const filtrarTareas = (e) => {
@@ -52,26 +60,26 @@ const Content = () => {
   // Filtrar tareas de manera inmediata
   useEffect(() => {
     if (selectValue === "incomplete") {
-     setFilteredTasks(tasksArray.filter((task) => !task.completed));
+      setUpdatedTasks(tasksArray.filter((task) => !task.completed));
     } else if (selectValue === "completed") {
-    setFilteredTasks(tasksArray.filter((task) => task.completed));
+      setUpdatedTasks(tasksArray.filter((task) => task.completed));
     } else if (selectValue === "all") {
-    setFilteredTasks(tasksArray);
+      setUpdatedTasks(tasksArray);
     }
-  }, [selectValue]);
+  }, [selectValue, updatedTasks]);
 
     // Tachar tarea
-    const completedTask = (index) => {
+    const completedTask = (id) => {
       setTasksArray((tasks) =>
-        tasks.map((task, i) =>
-          i === index ? { ...task, completed: !task.completed } : task
+        tasks.map((task) =>
+          task.id === id ? { ...task, completed: !task.completed } : task
         )
       );
     };
   
     // Eliminar tarea
-    const deleteTask = (index) => {
-      setTasksArray(tasksArray.filter((_, i) => i !== index));
+    const deleteTask = (id) => {
+      setTasksArray((tasks) => tasks.filter((task) => task.id !== id));
     };
   
 
@@ -132,10 +140,10 @@ const Content = () => {
 
       {/* Lista de tareas */}
       <Box mt="10">
-        {filteredTasks.map((task, index) => (
+        {updatedTasks.map((task) => (
           /* Texto de la tarea */
           <Box
-            key={index}
+            key={task.id}
             display="flex"
             flex="row"
             bg="white"
@@ -159,7 +167,7 @@ const Content = () => {
                 color="white"
                 px="6"
                 py="8"
-                onClick={() => completedTask(index)}
+                onClick={() => completedTask(task.id)}
               >
                 <FaCheck />
               </Button>
@@ -171,7 +179,7 @@ const Content = () => {
                 color="white"
                 px="6"
                 py="8"
-                onClick={() => deleteTask(index)}
+                onClick={() => deleteTask(task.id)}
               >
                 <FaTrash />
               </Button>
