@@ -1,14 +1,18 @@
+import { Button } from "@chakra-ui/react";
+import { FaPaperPlane } from "react-icons/fa";
 
-const AddButton = ({Button, FaPaperPlane}) => {
-  const addTask = () => {
-    console.log(localStorage.getItem("Tarea"))
- }
+const AddButton = ({ onClick }) => {
   return (
-      <Button colorScheme="purple" gap="4" size="lg" onClick={addTask}>
-        Agregar tarea
-        <FaPaperPlane />
-      </Button>
-  )
-}
+    <Button
+      colorScheme="purple"
+      gap="4"
+      size="lg"
+      onClick={onClick}
+      type="submit"
+    >
+      Agregar tarea <FaPaperPlane />
+    </Button>
+  );
+};
 
-export default AddButton
+export default AddButton;

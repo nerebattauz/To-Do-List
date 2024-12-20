@@ -18,5 +18,8 @@
       <li>Eliminar tareas a través de un botón</li>
     </ul>
 <img width="785" alt="todolist-tp1react" src="https://github.com/user-attachments/assets/7a7be44e-e563-4880-9f7b-b05e10ec62cb" />
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> dev
