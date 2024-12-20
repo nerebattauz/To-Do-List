@@ -8,7 +8,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { FaPaperPlane, FaCheck, FaTrash } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
+import Item from "./Item";
 
 const Content = () => {
   // Estado de las tareas, lista de tareas y tareas en el local storage
@@ -35,14 +36,14 @@ const Content = () => {
     if (inputValue === "") {
       alert("Ingrese una tarea");
     } else {
-      const newTask = {id: idCounter, text: inputValue, completed: false };
+      const newTask = { id: idCounter, text: inputValue, completed: false };
       setTasksArray([...tasksArray, newTask]);
       setInputValue("");
 
-     /// Aumentar id task
-    const newCounter = idCounter + 1;
-    setIdCounter(newCounter);
-    localStorage.setItem("idCounter", newCounter);
+      /// Aumentar id task
+      const newCounter = idCounter + 1;
+      setIdCounter(newCounter);
+      localStorage.setItem("idCounter", newCounter);
     }
   };
 
@@ -68,20 +69,19 @@ const Content = () => {
     }
   }, [selectValue, updatedTasks]);
 
-    // Tachar tarea
-    const completedTask = (id) => {
-      setTasksArray((tasks) =>
-        tasks.map((task) =>
-          task.id === id ? { ...task, completed: !task.completed } : task
-        )
-      );
-    };
-  
-    // Eliminar tarea
-    const deleteTask = (id) => {
-      setTasksArray((tasks) => tasks.filter((task) => task.id !== id));
-    };
-  
+  // Tachar tarea
+  const completedTask = (id) => {
+    setTasksArray((tasks) =>
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  // Eliminar tarea
+  const deleteTask = (id) => {
+    setTasksArray((tasks) => tasks.filter((task) => task.id !== id));
+  };
 
   return (
     <Box display="flex" flexDir="column" gap="8" w="80%">
@@ -139,54 +139,7 @@ const Content = () => {
       </Button>
 
       {/* Lista de tareas */}
-      <Box mt="10">
-        {updatedTasks.map((task) => (
-          /* Texto de la tarea */
-          <Box
-            key={task.id}
-            display="flex"
-            flex="row"
-            bg="white"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text
-              fontSize="xl"
-              color="gray.600"
-              display="inline"
-              mx="4"
-              textDecoration={task.completed ? "line-through" : "none"}
-            >
-              {task.text}
-            </Text>
-            <div>
-              {/* Botón marcar como completado */}
-              <Button
-                colorScheme="green"
-                rounded="0"
-                color="white"
-                px="6"
-                py="8"
-                onClick={() => completedTask(task.id)}
-              >
-                <FaCheck />
-              </Button>
-
-              {/* Botón eliminar tarea */}
-              <Button
-                colorScheme="red"
-                rounded="0"
-                color="white"
-                px="6"
-                py="8"
-                onClick={() => deleteTask(task.id)}
-              >
-                <FaTrash />
-              </Button>
-            </div>
-          </Box>
-        ))}
-      </Box>
+      <Item tasks={updatedTasks} status={completedTask} trash={deleteTask} />
     </Box>
   );
 };
