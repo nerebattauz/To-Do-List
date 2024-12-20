@@ -57,14 +57,17 @@ const Content = () => {
     setTasksArray(tasksArray.filter((_, i) => i !== index));
   };
 
-  // Filtrar tareas
-  const filtrarTareas = (e) => {  
+  // Seleccionar tareas
+  const filtrarTareas = (e) => { 
     setSelectValue(e.target.value)
   }
 
   // Filtrar tareas de manera inmediata
   useEffect(() => {
+    const [filteredTasks, setFilteredTasks] = useState(tasksArray)
     console.log(selectValue)
+    const allTasks = tasksArray
+
   }, [selectValue]);
 
   return (
