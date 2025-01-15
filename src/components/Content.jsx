@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Alert, AlertIcon } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Item from "./Item";
 import InputText from "./InputText";
@@ -18,17 +18,22 @@ const Content = () => {
   });
   const [selectValue, setSelectValue] = useState("all");
   const [updatedTasks, setUpdatedTasks] = useState(tasksArray);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Cambiar valor del input
   const changeInputValue = (e) => {
     setInputValue(e.target.value);
   };
 
+  // Alertar que falta ingresar la tarea
+  const inputAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 5000);
+    }
+
   // Agregar nueva tarea a la lista
   const addTask = () => {
-    if (inputValue === "") {
-      alert("Ingrese una tarea");
-    } else {
+    
       const newTask = { id: idCounter, text: inputValue, completed: false };
       setTasksArray([...tasksArray, newTask]);
       setInputValue("");
@@ -37,7 +42,7 @@ const Content = () => {
       const newCounter = idCounter + 1;
       setIdCounter(newCounter);
       localStorage.setItem("idCounter", newCounter);
-    }
+    
   };
 
   // Guardar tareas en LocalStorage de manera inmediata
@@ -92,8 +97,16 @@ const Content = () => {
       </Box>
 
       {/* Botón agregar tarea */}
-      <AddButton onClick={addTask} />
+      <AddButton onClick={inputValue === ""? inputAlert : addTask} />
 
+      {/* Alerta ingresar tarea */}
+      {showAlert && (
+          <Alert status="error" title="Ingrese una tarea" color={"red.700"} rounded={6} w={"fit-content"} alignSelf={"center"}>
+            <AlertIcon />
+            Ingrese una tarea
+          </Alert>
+        )}
+      
       {/* Lista de tareas */}
       <Item tasks={updatedTasks} status={completedTask} trash={deleteTask} />
     </Box>

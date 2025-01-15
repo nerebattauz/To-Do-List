@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Center } from "@chakra-ui/react";
 import { FaPaperPlane } from "react-icons/fa";
 
 const AddButton = ({ onClick }) => {
@@ -9,6 +9,8 @@ const AddButton = ({ onClick }) => {
       size="lg"
       onClick={onClick}
       type="submit"
+      width="fit-content"
+      alignSelf="center"
     >
       Agregar tarea <FaPaperPlane />
     </Button>
