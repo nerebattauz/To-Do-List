@@ -82,30 +82,30 @@ const Content = () => {
   };
 
   return (
-    <Box display="flex" flexDir="column" gap="8" w="80%">
+    <Box display="flex" flexDir="column" gap="8" w={["90%", "80%", "70%"]} >
       <Box
         display="flex"
-        gap="10"
+        alignItems="end"
+        gap="4"
         flexDir={{ base: "column", md: "row" }}
         justifySelf="center"
       >
         {/* Input de tarea */}
         <InputText value={inputValue} onChange={changeInputValue} />
 
-        {/* Input select estado tarea */}
-        <InputSelect value={selectValue} onChange={filterTasks} />
+              {/* Botón agregar tarea */}
+        <AddButton onClick={inputValue === ""? inputAlert : addTask} />
       </Box>
-
-      {/* Botón agregar tarea */}
-      <AddButton onClick={inputValue === ""? inputAlert : addTask} />
-
-      {/* Alerta ingresar tarea */}
       {showAlert && (
-          <Alert status="error" title="Ingrese una tarea" color={"red.700"} rounded={6} w={"fit-content"} alignSelf={"center"}>
+          <Alert status="error" title="Ingrese una tarea" color={"red.700"} rounded={6}>
             <AlertIcon />
             Ingrese una tarea
           </Alert>
         )}
+{/* Input select estado tarea */}
+<InputSelect value={selectValue} onChange={filterTasks} />
+              {/* Alerta ingresar tarea */}
+              
       
       {/* Lista de tareas */}
       <Item tasks={updatedTasks} status={completedTask} trash={deleteTask} />

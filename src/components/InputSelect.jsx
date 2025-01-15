@@ -10,6 +10,7 @@ const InputSelect = ({ value, onChange }) => {
         bg="white"
         color="gray.600"
         onChange={onChange}
+  
       >
         <option color="purple.800" value="all">
           Todas las tareas

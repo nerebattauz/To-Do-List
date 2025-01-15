@@ -5,12 +5,11 @@ const AddButton = ({ onClick }) => {
   return (
     <Button
       colorScheme="purple"
-      gap="4"
       size="lg"
       onClick={onClick}
       type="submit"
-      width="fit-content"
-      alignSelf="center"
+      gap={4}
+      w={"full"}
     >
       Agregar tarea <FaPaperPlane />
     </Button>
