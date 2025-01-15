@@ -26,7 +26,8 @@ const ItemList = ({ tasks, status, trash }) => {
           <div>
             {/* Botón marcar como completado */}
             <Button
-              colorScheme="green"
+              backgroundColor={task.completed ? "grey" : "green"}
+              _hover={{backgroundColor: "green.700"}}
               rounded="0"
               color="white"
               px="6"
