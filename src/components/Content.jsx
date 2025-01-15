@@ -1,9 +1,16 @@
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Alert,
+  AlertIcon,
+  Button,
+  FormControl,
+  FormLabel,
+  Select,
+  Input
+} from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import Item from "./Item";
-import InputText from "./InputText";
-import AddButton from "./AddButton";
-import InputSelect from "./InputSelect";
+import { FaPaperPlane } from "react-icons/fa";
+import ItemList from "./ItemList";
 
 const Content = () => {
   // Estado de las tareas, lista de tareas y tareas en el local storage
@@ -18,26 +25,29 @@ const Content = () => {
   });
   const [selectValue, setSelectValue] = useState("all");
   const [updatedTasks, setUpdatedTasks] = useState(tasksArray);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Cambiar valor del input
   const changeInputValue = (e) => {
     setInputValue(e.target.value);
   };
 
+  // Alertar que falta ingresar la tarea
+  const inputAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 5000);
+  };
+
   // Agregar nueva tarea a la lista
   const addTask = () => {
-    if (inputValue === "") {
-      alert("Ingrese una tarea");
-    } else {
-      const newTask = { id: idCounter, text: inputValue, completed: false };
-      setTasksArray([...tasksArray, newTask]);
-      setInputValue("");
+    const newTask = { id: idCounter, text: inputValue, completed: false };
+    setTasksArray([...tasksArray, newTask]);
+    setInputValue("");
 
-      /// Aumentar id task
-      const newCounter = idCounter + 1;
-      setIdCounter(newCounter);
-      localStorage.setItem("idCounter", newCounter);
-    }
+    /// Aumentar id task
+    const newCounter = idCounter + 1;
+    setIdCounter(newCounter);
+    localStorage.setItem("idCounter", newCounter);
   };
 
   // Guardar tareas en LocalStorage de manera inmediata
@@ -77,25 +87,83 @@ const Content = () => {
   };
 
   return (
-    <Box display="flex" flexDir="column" gap="8" w="80%">
+    <Box display="flex" flexDir="column" gap="8" w={["90%", "80%", "70%"]}>
       <Box
         display="flex"
-        gap="10"
+        alignItems="end"
+        gap="4"
         flexDir={{ base: "column", md: "row" }}
         justifySelf="center"
       >
         {/* Input de tarea */}
-        <InputText value={inputValue} onChange={changeInputValue} />
+        <FormControl>
+      <FormLabel>Tarea</FormLabel>
+      <Input
+        value={inputValue}
+        size="lg"
+        bg="white"
+        color="gray.600"
+        placeholder="Ingresar una tarea"
+        autoComplete="off"
+        onChange={changeInputValue}
+      />
+    </FormControl>
 
-        {/* Input select estado tarea */}
-        <InputSelect value={selectValue} onChange={filterTasks} />
+        {/* Botón agregar tarea */}
+        <Button
+          colorScheme="purple"
+          size="lg"
+          type="submit"
+          gap={4}
+          w={"full"}
+          onClick={inputValue === "" ? inputAlert : addTask}
+        >
+          Agregar tarea <FaPaperPlane />
+        </Button>
+
       </Box>
+      {showAlert && (
+        <Alert
+          status="error"
+          title="Ingrese una tarea"
+          color={"red.700"}
+          rounded={6}
+        >
+          <AlertIcon />
+          Ingrese una tarea
+        </Alert>
+      )}
 
-      {/* Botón agregar tarea */}
-      <AddButton onClick={addTask} />
+      {/* Input select estado tarea */}
+      <FormControl>
+        <FormLabel>Seleccionar</FormLabel>
+        <Select
+          value={selectValue}
+          size="lg"
+          bg="white"
+          color="gray.600"
+          onChange={filterTasks}
+        >
+          <option color="purple.800" value="all">
+            Todas las tareas
+          </option>
+          <option color="purple.800" value="incomplete">
+            Tareas incompletas
+          </option>
+          <option color="purple.800" value="completed">
+            Tareas completadas
+          </option>
+        </Select>
+      </FormControl>
+
+      {/* Alerta ingresar tarea */}
 
       {/* Lista de tareas */}
-      <Item tasks={updatedTasks} status={completedTask} trash={deleteTask} />
+      <ItemList
+        tasks={updatedTasks}
+        status={completedTask}
+        trash={deleteTask}
+      />
     </Box>
   );
 };

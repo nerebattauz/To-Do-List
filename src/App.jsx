@@ -1,6 +1,5 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Heading } from "@chakra-ui/react";
 import Content from "./components/Content";
-import Title from "./components/Title";
 
 function App() {
   return (
@@ -18,7 +17,9 @@ function App() {
       textAlign="center"
       textColor="white"
     >
-      <Title />
+          <Heading size="3xl" fontWeight="bold">
+            Lista de tareas
+          </Heading>
       <Content />
     </Container>
   );

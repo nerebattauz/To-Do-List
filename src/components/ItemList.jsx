@@ -1,7 +1,7 @@
 import { Box, Button, Text } from "@chakra-ui/react";
 import { FaCheck, FaTrash } from "react-icons/fa";
 
-const Item = ({ tasks, status, trash }) => {
+const ItemList = ({ tasks, status, trash }) => {
   return (
     <Box mt="10">
       {tasks.map((task) => (
@@ -26,7 +26,8 @@ const Item = ({ tasks, status, trash }) => {
           <div>
             {/* Botón marcar como completado */}
             <Button
-              colorScheme="green"
+              backgroundColor={task.completed ? "grey" : "green"}
+              _hover={{backgroundColor: "green.700"}}
               rounded="0"
               color="white"
               px="6"
@@ -54,4 +55,4 @@ const Item = ({ tasks, status, trash }) => {
   );
 };
 
-export default Item;
+export default ItemList;
