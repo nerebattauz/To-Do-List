@@ -1,7 +1,7 @@
 import { Box, Button, Text } from "@chakra-ui/react";
 import { FaCheck, FaTrash } from "react-icons/fa";
 
-const Item = ({ tasks, status, trash }) => {
+const ItemList = ({ tasks, status, trash }) => {
   return (
     <Box mt="10">
       {tasks.map((task) => (
@@ -54,4 +54,4 @@ const Item = ({ tasks, status, trash }) => {
   );
 };
 
-export default Item;
+export default ItemList;
